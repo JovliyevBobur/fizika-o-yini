@@ -1,11 +1,13 @@
 import { Header } from "@/components/Header";
 import { PhysicsQuiz } from "@/components/PhysicsQuiz";
+import { QuestionQuiz } from "@/components/QuestionQuiz";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <PhysicsQuiz />
+      <QuestionQuiz />
       
       {/* Footer */}
       <footer className="py-8 border-t border-border">
