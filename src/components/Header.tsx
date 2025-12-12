@@ -53,14 +53,23 @@ export function Header() {
             Drag & drop yordamida asboblarni tegishli kattaliklarga moslang.
           </p>
 
-          <Button
-            size="lg"
-            onClick={scrollToQuiz}
-            className="gap-2 bg-primary hover:bg-primary/90 text-lg px-8 py-6 animate-fade-in pulse-glow"
-            style={{ animationDelay: "0.2s" }}
-          >
-            Moslashtirish sharti
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <Button
+              size="lg"
+              onClick={scrollToQuiz}
+              className="gap-2 bg-primary hover:bg-primary/90 text-lg px-8 py-6 pulse-glow"
+            >
+              Moslashtirish sharti
+            </Button>
+            <Button
+              size="lg"
+              onClick={() => document.getElementById("2-shart")?.scrollIntoView({ behavior: "smooth" })}
+              variant="outline"
+              className="gap-2 text-lg px-8 py-6 border-accent text-accent hover:bg-accent/10"
+            >
+              Savollar sharti
+            </Button>
+          </div>
         </div>
       </div>
     </header>
