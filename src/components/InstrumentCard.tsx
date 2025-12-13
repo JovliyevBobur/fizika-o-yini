@@ -26,7 +26,7 @@ export function InstrumentCard({ instrument, isUsed }: InstrumentCardProps) {
       className={`
         flex flex-col items-center justify-center gap-2 p-3 sm:p-4 
         rounded-xl border transition-all duration-300 select-none
-        min-w-[100px] sm:min-w-[120px]
+        min-w-[100px] sm:min-w-[120px] touch-none
         ${isUsed 
           ? "opacity-40 cursor-not-allowed bg-muted/50 border-border/30" 
           : isDragging

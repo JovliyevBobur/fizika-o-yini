@@ -1,6 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
-import { instruments, getRandomQuantities, Quantity, Instrument, getInstrumentById } from "@/data/physicsData";
+import { 
+  DndContext, 
+  DragEndEvent, 
+  DragOverlay, 
+  DragStartEvent,
+  TouchSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+  pointerWithin,
+} from "@dnd-kit/core";
+import { instruments, getRandomQuantities, Quantity, getInstrumentById } from "@/data/physicsData";
 import { InstrumentCard } from "./InstrumentCard";
 import { QuantityDropZone } from "./QuantityDropZone";
 import { ResultsModal } from "./ResultsModal";
@@ -68,6 +78,22 @@ export function PhysicsQuiz() {
 
   const activeInstrument = activeId ? getInstrumentById(activeId) : null;
 
+  // Configure sensors for both mouse and touch
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 100,
+      tolerance: 5,
+    },
+  });
+
+  const sensors = useSensors(mouseSensor, touchSensor);
+
   return (
     <section id="1-shart" className="py-12 sm:py-20">
       <div className="container mx-auto px-4">
@@ -85,7 +111,12 @@ export function PhysicsQuiz() {
           </p>
         </div>
 
-        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <DndContext 
+          sensors={sensors}
+          collisionDetection={pointerWithin}
+          onDragStart={handleDragStart} 
+          onDragEnd={handleDragEnd}
+        >
           {/* Quantities grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-10">
             {selectedQuantities.map((quantity, index) => (
