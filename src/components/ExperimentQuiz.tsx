@@ -41,17 +41,14 @@ export function ExperimentQuiz() {
 
   return (
     <div className="space-y-6">
-      {/* Experiment image */}
-      <div className="relative rounded-xl overflow-hidden">
-        <img
-          src={experiment.imageUrl}
-          alt={experiment.name}
-          className="w-full h-48 md:h-64 object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">
-          {experiment.name}
-        </h3>
+      {/* Experiment visual */}
+      <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+        <div className="flex flex-col items-center justify-center py-12">
+          <span className="text-7xl mb-4">{experiment.emoji}</span>
+          <h3 className="text-xl font-bold text-center px-4">
+            {experiment.name}
+          </h3>
+        </div>
       </div>
 
       {/* Description */}
