@@ -3,7 +3,31 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { BlackBox, getRandomBlackBox } from "@/data/blackBoxData";
 import { toast } from "sonner";
-import { RefreshCw, Check, Box, HelpCircle } from "lucide-react";
+import { RefreshCw, Check, Box, HelpCircle, Package, Sparkles } from "lucide-react";
+
+// Emoji mapping for answers
+const answerEmojis: Record<string, string> = {
+  "Lampochka": "💡",
+  "Televizor": "📺",
+  "Kompyuter": "💻",
+  "Muzlatgich": "❄️",
+  "Dvigatel": "⚙️",
+  "Tormoz": "🛑",
+  "Rul": "🎮",
+  "G'ildirak": "⚫",
+  "Shamol": "💨",
+  "Gravitatsiya": "🌍",
+  "Magnit": "🧲",
+  "Elektr": "⚡",
+  "Soat": "⏰",
+  "Termometr": "🌡️",
+  "Barometr": "📊",
+  "Voltmetr": "🔌",
+  "Tor (sim)": "🎸",
+  "Disk": "💿",
+  "Tugma": "🔘",
+  "Qopqoq": "🔲"
+};
 
 export function BlackBoxQuiz() {
   const [blackBox, setBlackBox] = useState<BlackBox | null>(null);
@@ -46,17 +70,38 @@ export function BlackBoxQuiz() {
   if (!blackBox) return null;
 
   const isCorrect = selectedAnswer === blackBox.correctIndex;
+  const correctAnswer = blackBox.options[blackBox.correctIndex];
+  const correctEmoji = answerEmojis[correctAnswer] || "✨";
 
   return (
     <div className="space-y-6">
       {/* Black box visual */}
       <div className="flex justify-center">
         <div className="relative">
-          <div className="w-40 h-40 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl flex items-center justify-center border-4 border-gray-700">
-            <Box className="w-16 h-16 text-gray-500" />
-          </div>
-          <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center font-bold">
-            ?
+          {!isChecked ? (
+            // Closed box - mystery state
+            <div className="w-40 h-40 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl flex items-center justify-center border-4 border-gray-700">
+              <Box className="w-16 h-16 text-gray-500" />
+            </div>
+          ) : (
+            // Opened box - revealed state
+            <div className={`w-40 h-40 rounded-2xl shadow-2xl flex flex-col items-center justify-center border-4 transition-all duration-500 ${
+              isCorrect 
+                ? "bg-gradient-to-br from-green-600 to-green-800 border-green-500" 
+                : "bg-gradient-to-br from-red-600 to-red-800 border-red-500"
+            }`}>
+              <span className="text-5xl mb-2 animate-scale-in">{correctEmoji}</span>
+              <p className="text-white text-sm font-bold text-center px-2">{correctAnswer}</p>
+            </div>
+          )}
+          <div className={`absolute -top-2 -right-2 rounded-full w-8 h-8 flex items-center justify-center font-bold transition-all duration-300 ${
+            isChecked 
+              ? isCorrect 
+                ? "bg-green-500 text-white" 
+                : "bg-red-500 text-white"
+              : "bg-primary text-primary-foreground"
+          }`}>
+            {isChecked ? (isCorrect ? "✓" : "✗") : "?"}
           </div>
         </div>
       </div>
