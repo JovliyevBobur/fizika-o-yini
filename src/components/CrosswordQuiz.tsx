@@ -10,6 +10,7 @@ interface CellData {
   wordIndices: number[];
   isActive: boolean;
   number?: number;
+  isHint?: boolean;
 }
 
 export function CrosswordQuiz() {
@@ -42,6 +43,23 @@ export function CrosswordQuiz() {
       }
     });
     
+    // Collect all cells that need hints (first letter of each word)
+    const hintCells = new Set<string>();
+    newCrossword.words.forEach((word) => {
+      // Add first letter of each word as hint
+      const row = word.row;
+      const col = word.col;
+      hintCells.add(`${row}-${col}`);
+      
+      // Also add middle letter for longer words
+      if (word.word.length > 4) {
+        const midIndex = Math.floor(word.word.length / 2);
+        const midRow = word.direction === 'horizontal' ? row : row + midIndex;
+        const midCol = word.direction === 'horizontal' ? col + midIndex : col;
+        hintCells.add(`${midRow}-${midCol}`);
+      }
+    });
+    
     // Second pass - fill in the grid
     newCrossword.words.forEach((word, wordIndex) => {
       for (let i = 0; i < word.word.length; i++) {
@@ -51,6 +69,7 @@ export function CrosswordQuiz() {
         if (row < size && col < size) {
           const existingCell = newGrid[row][col];
           const key = `${word.row}-${word.col}`;
+          const isHint = hintCells.has(`${row}-${col}`);
           
           if (existingCell) {
             existingCell.wordIndices.push(wordIndex);
@@ -59,8 +78,14 @@ export function CrosswordQuiz() {
               letter: word.word[i],
               wordIndices: [wordIndex],
               isActive: true,
-              number: i === 0 ? cellNumbers.get(key) : undefined
+              number: i === 0 ? cellNumbers.get(key) : undefined,
+              isHint
             };
+          }
+          
+          // Pre-fill hint letters in user grid
+          if (isHint) {
+            newUserGrid[row][col] = word.word[i].toUpperCase();
           }
         }
       }
@@ -226,6 +251,7 @@ export function CrosswordQuiz() {
                 className={`
                   relative aspect-square flex items-center justify-center
                   ${cell ? 'bg-background border-2 border-border' : 'bg-muted'}
+                  ${cell?.isHint && !isChecked ? 'bg-primary/10 border-primary/30' : ''}
                   ${isChecked && cell && getCellStatus(rowIndex, colIndex) === 'correct' ? 'bg-green-100 dark:bg-green-900/50 border-green-500' : ''}
                   ${isChecked && cell && getCellStatus(rowIndex, colIndex) === 'incorrect' ? 'bg-red-100 dark:bg-red-900/50 border-red-500' : ''}
                   transition-colors duration-200
@@ -253,12 +279,13 @@ export function CrosswordQuiz() {
                     className={`
                       w-full h-full text-center font-bold text-sm uppercase bg-transparent
                       focus:outline-none focus:ring-2 focus:ring-primary/50 rounded
-                      ${isChecked ? 'cursor-default' : 'cursor-text'}
+                      ${isChecked || cell.isHint ? 'cursor-default' : 'cursor-text'}
+                      ${cell.isHint && !isChecked ? 'text-primary font-extrabold' : ''}
                       ${isChecked && getCellStatus(rowIndex, colIndex) === 'correct' ? 'text-green-700 dark:text-green-400' : ''}
                       ${isChecked && getCellStatus(rowIndex, colIndex) === 'incorrect' ? 'text-red-600 dark:text-red-400' : ''}
                     `}
                     maxLength={1}
-                    disabled={isChecked}
+                    disabled={isChecked || cell.isHint}
                   />
                 )}
               </div>

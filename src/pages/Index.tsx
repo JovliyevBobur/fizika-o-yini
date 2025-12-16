@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Atom, FlaskConical, GripVertical, HelpCircle, Calculator, Beaker, Box, Grid3X3, AlertTriangle, Lightbulb } from "lucide-react";
+import { Atom, FlaskConical, GripVertical, HelpCircle, Calculator, Beaker, Box, Grid3X3, AlertTriangle, Lightbulb, Users, Scale } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const shartlar = [
@@ -82,6 +82,26 @@ const shartlar = [
     icon: Lightbulb,
     color: "accent",
     maxScore: "10 ball"
+  },
+  {
+    id: 9,
+    path: "/9-shart",
+    title: "9-shart",
+    subtitle: "Juftini top",
+    description: "Olimlar rasmlarining juftlarini toping.",
+    icon: Users,
+    color: "secondary",
+    maxScore: "10 ball"
+  },
+  {
+    id: 10,
+    path: "/10-shart",
+    title: "10-shart",
+    subtitle: "Birligini top",
+    description: "Fizik kattaliklarga tegishli birliklarni moslang.",
+    icon: Scale,
+    color: "primary",
+    maxScore: "10 ball"
   }
 ];
 
@@ -122,7 +142,7 @@ const Index = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.1s" }}>
-              8 ta shart bo'yicha fizikani o'rganing va bilimingizni sinab ko'ring.
+              10 ta shart bo'yicha fizikani o'rganing va bilimingizni sinab ko'ring.
             </p>
           </div>
         </div>
